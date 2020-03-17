@@ -8,28 +8,30 @@ from os.path import isfile, join
 import cv2
 import sys
 
-data_dir = "data/raw/mountains"
-result_data_dir = "data/terrain/mountains"
+import matplotlib.pyplot as plt
 
-images = [f for f in listdir(data_dir) if isfile(join(data_dir, f))]
+inp_data_dir = "/media/samtitar/Ubuntu Data 2/terrain-selection-tool/data/mountains"
+out_data_dir = "data/Terrain/processed/mountains"
+
+images = [f for f in listdir(inp_data_dir) if isfile(join(inp_data_dir, f))]
 
 num_images = len(images)
 progress = 0
 
+image_path = images[0]
+
 for image_path in images:
+    progress += 1
     try:
         print("\rProgress: {:.2f}%".format(progress / num_images * 100), end="")
 
-        data_path = join(data_dir, image_path)
-        new_data_path = join(result_data_dir, ''.join(image_path.split('.')[:-1]) + '.jpg')
+        data_path = join(inp_data_dir, image_path)
+        new_data_path = join(out_data_dir, ''.join(image_path.split('.')[:-1]) + '.png')
 
         image = cv2.imread(data_path)
-
         result = Image.fromarray(image)
         result.save(new_data_path)
-
-        progress += 1
     except Exception as e:
-        print("Error at image {}".format(progress))
+        print("\rError at image {}".format(progress))
         continue
 print()
